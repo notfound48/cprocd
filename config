@@ -1,0 +1,5 @@
+JPEG_QUALITY=100
+PNGOUT=${SCRIPT_DIR}/bin/pngout/x86_64/pngout
+TEMP_DIR="/tmp"
+LISTEN_LIST=/etc/cprocd.list
+LOG_FILE=/var/log/cprocd.log

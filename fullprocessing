@@ -1,0 +1,22 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(dirname $(readlink -e $0))
+source "${SCRIPT_DIR}/config"
+
+echo "$(tput setaf 1)START CREATING FULL PROCESSING STACK"
+
+while read item; do
+
+	echo "$(tput setaf 4)Processing for: " ${item}
+
+	echo "$(tput setaf 2)Create optimizing JPEG stack"
+
+	find "${item}" -type f -name "*.jp*g" -exec convert {} -quality ${JPEG_QUALITY} {} \;
+
+	echo "$(tput setaf 2)Create optimizing PNG stack"
+
+	find "${item}" -type f -name "*.png" -exec ${PNGOUT} {} \;
+
+done < <( egrep -v '^ *(@|#)' < "${LISTEN_LIST}")
+
+echo "$(tput setaf 1)FINISH CREATING FULL PROCESSING STACK"

@@ -1,0 +1,45 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(dirname $(readlink -e $0))
+source "${SCRIPT_DIR}/config"
+
+inotifywait -mrq -e close_write -e moved_to --format "%w%f" --fromfile ${LISTEN_LIST} | while read "FILE"
+do
+
+if [ -f "$FILE" ]; then
+
+	case `echo ${FILE##*.} | tr '[:upper:]' '[:lower:]'` in
+
+		"jpg" | "jpeg" )
+
+			echo "[`date +'%x %H:%M:%S'`] Processing file: $FILE" >> ${LOG_FILE}
+			
+			TEMP_FILE=`date +%s%N | md5sum | head -c 16`
+				
+			convert "${FILE}" -quality ${JPEG_QUALITY} ${TEMP_DIR}/${TEMP_FILE} >/dev/null
+
+			if [ `(stat -c%s "${FILE}")` -gt `(stat -c%s "${TEMP_DIR}/${TEMP_FILE}")` ]; then
+
+				cp ${TEMP_DIR}/${TEMP_FILE} "${FILE}"
+				
+			fi
+
+			rm ${TEMP_DIR}/${TEMP_FILE}
+
+ 			;;
+
+		"png" )
+
+			echo "[`date +'%x %H:%M:%S'`] Processing file: $FILE" >> ${LOG_FILE}
+			
+			${PNGOUT} "${FILE}" >/dev/null
+
+		;;
+
+	esac
+
+fi
+
+done
+
+exit 0
