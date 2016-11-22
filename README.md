@@ -10,7 +10,7 @@ sudo apt-get install inotify-tools imagemagick git
 ```
 ## Установка
 ```
-sudo git clone https://notfound48@bitbucket.org/notfound48/cprocd.git /usr/local/cprocd
+sudo git clone https://github.com/notfound48/cprocd.git /usr/local/cprocd
 sudo /usr/local/cprocd/install.sh
 ```
 ## Настройка
